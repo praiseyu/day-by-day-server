@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const router = express.Router();
-const {authorize} = require("../utils/middleware");
+const {authenticateToken} = require("../utils/middleware");
 
 // POST /signup
 router.post("/signup", async (req, res) => {
@@ -40,6 +40,7 @@ router.post("/login", async (req, res) => {
             return res.status(400).send("Email or password is incorrect.");
         }
 
+        // const token = jwt.sign({ user_id: user.user_id }, process.env.JWT_SECRET);
         const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
         res.json({ token });
 

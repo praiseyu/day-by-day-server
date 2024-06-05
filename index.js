@@ -32,17 +32,25 @@ cloudinary.config({
 // app.use("/api", apiRoutes);
 
 
-app.post('/upload', upload.single('image'), async (req, res) => {
-  try {
-    const fileBuffer = req.file.buffer;
-    await cloudinary.uploader.upload_stream(
-      { folder: "uploads" },
-      (error, result) => {
-        if (error) {
-          console.error(error);
-          return res.status(500).json({ error: "Error uploading image to Cloudinary" });
-        }
-        res.json(result);
+// app.post('/upload', upload.single('image'), async (req, res) => {
+//   try {
+//     const fileBuffer = req.file.buffer;
+//     await cloudinary.uploader.upload_stream(
+//       { folder: "uploads" },
+//       (error, result) => {
+//         if (error) {
+//           console.error(error);
+//           return res.status(500).json({ error: "Error uploading image to Cloudinary" });
+//         }
+//         res.json(result);
+//       }
+//     ).end(fileBuffer);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Error uploading image to Cloudinary" });
+//   }
+// });
+
         // secure_url -- image path
         // created_at
         // height: 
@@ -50,16 +58,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         // asset_id = completely unique across all cloudinary files in my account
         // public_id = uploads/:id
 
-      }
-    ).end(fileBuffer);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error uploading image to Cloudinary" });
-  }
-});
-
-app.use("/api", publicRoutes);
-app.use("/api", privateRoutes);
+app.use("/", publicRoutes);
+// app.use("/api", privateRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on PORT: ${PORT}.`);

@@ -30,7 +30,7 @@ app.use(express.json());
 
 
 
-app.use("/api", publicRoutes);
+app.use("/", publicRoutes);
 app.use("/api", privateRoutes);
 
 // app.post('/upload', upload.single('image'), async (req, res) => {

@@ -13,6 +13,7 @@ cloudinary.config({
 
 async function uploadPhoto(req, res){
     const {entrydate } = req.params;
+    const {user_id} = req.user;
     try {
         const fileBuffer = req.file.buffer;
         cloudinary.uploader.upload_stream(
@@ -23,7 +24,7 @@ async function uploadPhoto(req, res){
               return res.status(500).json({ error: "Error uploading image to Cloudinary" });
             }
             try{
-              await knex("photos").insert({user_id: 1, entry_date: entrydate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type });
+              await knex("photos").insert({user_id: user_id, entry_date: entrydate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type });
               res.json(result);
             }
             catch(err){
@@ -40,8 +41,9 @@ async function uploadPhoto(req, res){
 
 async function getTodaysPhotos(req,res){
     const {entrydate} = req.params;
-    // const {user_id} = req.user; UNCOMMENT ONCE AUTHENTICATION IS GOOD.
-    user_id = 1;
+    // UNCOMMENT ONCE AUTHENTICATION IS GOOD.
+    const {user_id} = req.user; 
+    // user_id = 1;
     try{
         const photos = await knex("photos").where("user_id", user_id).where("entry_date", entrydate);
         res.status(200).json(photos);

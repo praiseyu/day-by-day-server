@@ -8,10 +8,10 @@ const upload = multer({storage:storage});
 
 //UNAUTHENTICATED ROUTES:
 // POST /photos (upload photos)
-router.post("/photos/:entrydate", upload.single("image"), uploadController.uploadPhoto);
+// router.post("/photos/:entrydate", upload.single("image"), uploadController.uploadPhoto);
 
 // GET /photos 
-router.get("/photos/:entrydate", uploadController.getTodaysPhotos);
+// router.get("/photos/:entrydate", uploadController.getTodaysPhotos);
 
 // POST /text 
 
@@ -34,10 +34,10 @@ router.get("/photos/:entrydate", uploadController.getTodaysPhotos);
 
 //ONCE AUTHENTICATION WORKS, UNCOMMENT THESE PATHS::
 // POST /photos (upload photos)
-// router.post("/photos/:entrydate", authenticateToken, upload.single("image"), uploadController.uploadPhoto);
+router.post("/photos/:entrydate", authenticateToken, upload.single("image"), uploadController.uploadPhoto);
 
 // GET /photos 
-// router.get("/photos/:entrydate", authenticateToken, uploadController.getTodaysPhotos);
+router.get("/photos/:entrydate", authenticateToken, uploadController.getTodaysPhotos);
 
 // POST /text 
 

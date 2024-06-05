@@ -2,16 +2,21 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const publicRoutes = require("./routes/publicRoutes");
+const privateRoutes = require("./routes/privateRoutes");
+
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({storage:storage});
 const cloudinary = require("cloudinary").v2;
 
-const apiRoutes = require("./routes/apiRoutes");
 
+const app = express();
 const PORT = process.env.PORT || 8080;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
-const app = express();
+
+app.use(cors({ origin: CORS_ORIGIN }));
+app.use(express.json());
 
 
 cloudinary.config({
@@ -21,16 +26,8 @@ cloudinary.config({
     api_secret: process.env.API_SECRET
 });
 
-// async function handleUpload(file){
-//   const res = await cloudinary.uploader.upload(file, {
-//     resource_type: "auto",
-//   });
-//   return res;
-// }
 
 
-app.use(cors({ origin: CORS_ORIGIN }));
-app.use(express.json());
 
 // app.use("/api", apiRoutes);
 
@@ -60,6 +57,9 @@ app.post('/upload', upload.single('image'), async (req, res) => {
     res.status(500).json({ error: "Error uploading image to Cloudinary" });
   }
 });
+
+app.use("/api", publicRoutes);
+app.use("/api", privateRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on PORT: ${PORT}.`);

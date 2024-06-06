@@ -11,7 +11,7 @@ async function uploadText(req, res){
     }
     try{
         const newTextId = await knex("textblocks").insert({description: description, entry_date: entrydate, user_id: user_id});
-        const newTextBlock = await knex("textblocks").where("text_id", newTextId[0]).first();
+        const newTextBlock = await knex("textblocks").where("text_id", newTextId[0]);
         return res.status(201).json(newTextBlock);
     } catch(err){
         return res.status(500).send(`Error posting new text block: ${err}`);

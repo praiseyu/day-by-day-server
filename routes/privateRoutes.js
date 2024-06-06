@@ -1,23 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const uploadController = require("../controllers/uploadController");
+const photosController = require("../controllers/photosController");
 const {authenticateToken} = require("../utils/middleware");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({storage:storage});
 
 //UNAUTHENTICATED ROUTES:
-// POST /photos (upload photos)
-// router.post("/photos/:entrydate", upload.single("image"), uploadController.uploadPhoto);
+// POST /photos (upload photos) - AUTHDONE
+// router.post("/photos/:entrydate", upload.single("image"), photosController.uploadPhoto);
 
-// GET /photos 
-// router.get("/photos/:entrydate", uploadController.getTodaysPhotos);
+// GET /photos -AUTH DONE
+// router.get("/photos/:entrydate", photosController.getTodaysPhotos);
 
 // POST /text 
-
+router.post("/text", textController.uploadText)
 
 // GET /text
-
+router.get("/text", textController.getText)
 
 // POST /entries (updates db with layout, text, and photo paths)
 
@@ -33,11 +33,11 @@ const upload = multer({storage:storage});
 
 
 //ONCE AUTHENTICATION WORKS, UNCOMMENT THESE PATHS::
-// POST /photos (upload photos)
-router.post("/photos/:entrydate", authenticateToken, upload.single("image"), uploadController.uploadPhoto);
+// POST /photos (upload photos) -- WORKS
+router.post("/photos/:entrydate", authenticateToken, upload.single("image"), photosController.uploadPhoto);
 
-// GET /photos 
-router.get("/photos/:entrydate", authenticateToken, uploadController.getTodaysPhotos);
+// GET /photos -- IT WORKS 
+router.get("/photos/:entrydate", authenticateToken, photosController.getTodaysPhotos);
 
 // POST /text 
 

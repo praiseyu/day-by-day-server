@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const router = express.Router();
-const {authenticateToken} = require("../utils/middleware");
+// const {authenticateToken} = require("../utils/middleware");
 
 // POST /signup
 router.post("/signup", async (req, res) => {
@@ -48,10 +48,6 @@ router.post("/login", async (req, res) => {
         res.status(401).send("Login failed.");
     }
 });
-
-// router.get("/profile", authorize, (req, res) => {
-//     res.json(req.user);
-// });
 
 
 module.exports = router;

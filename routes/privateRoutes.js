@@ -15,10 +15,10 @@ const upload = multer({storage:storage});
 // router.get("/photos/:entrydate", photosController.getTodaysPhotos);
 
 // POST /text 
-router.post("/:entrydate/text", textController.uploadText)
+// router.post("/:entrydate/text", textController.uploadText)
 
 // GET /text
-router.get("/:entrydate/text", textController.getText)
+// router.get("/:entrydate/text", textController.getText)
 
 // POST /entries (updates db with layout, text, and photo paths)
 
@@ -40,11 +40,11 @@ router.post("/photos/:entrydate", authenticateToken, upload.single("image"), pho
 // GET /photos -- IT WORKS 
 router.get("/photos/:entrydate", authenticateToken, photosController.getTodaysPhotos);
 
-// POST /text 
+// POST /text -- IT WORKS 
+router.post("/:entrydate/text", authenticateToken, textController.uploadText)
 
-
-// GET /text
-
+// GET /text -- IT WORKS
+router.get("/:entrydate/text", authenticateToken, textController.getText)
 
 // POST /entries (updates db with layout, text, and photo paths)
 

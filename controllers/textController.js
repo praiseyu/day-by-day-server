@@ -5,11 +5,12 @@ const knex = require("knex")(require("../knexfile"));
 async function uploadText(req, res){
     const {entrydate} = req.params;
     const {description} = req.body;
+    const {user_id} = req.user; 
     if(!description || description.trim()===""){
         return res.status(400).send("Text is missing.")
     }
     try{
-        const newTextId = await knex("textblocks").insert({description: description, entry_date: entrydate});
+        const newTextId = await knex("textblocks").insert({description: description, entry_date: entrydate, user_id: user_id});
         const newTextBlock = await knex("textblocks").where("text_id", newTextId[0]).first();
         return res.status(201).json(newTextBlock);
     } catch(err){
@@ -20,8 +21,9 @@ async function uploadText(req, res){
 // GET TEXT
 async function getText(req, res){
     const {entrydate} = req.params;
+    const {user_id} = req.user; 
     try{
-        const textBlocks = await knex("textblocks").where("entry_date", entrydate);
+        const textBlocks = await knex("textblocks").where("user_id", user_id).where("entry_date", entrydate);
         res.status(200).json(textBlocks);
     } catch(err){
         res.status(404).send("No entries for this date found.");

@@ -2,13 +2,11 @@ const knex = require("knex")(require("../knexfile"));
 
 // POST TEXT
 
+
 async function uploadText(req, res){
     const {entrydate} = req.params;
     const {description} = req.body;
     const {user_id} = req.user; 
-    if(!description || description.trim()===""){
-        return res.status(400).send("Text is missing.")
-    }
     try{
         const newTextId = await knex("textblocks").insert({description: description, entry_date: entrydate, user_id: user_id});
         const newTextBlock = await knex("textblocks").where("text_id", newTextId[0]);

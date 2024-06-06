@@ -1,8 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 
 // POST TEXT
-
-
 async function uploadText(req, res){
     const {entrydate} = req.params;
     const {description} = req.body;

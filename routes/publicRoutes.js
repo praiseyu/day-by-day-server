@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
         await knex("users").insert({ name, email, password: encrypted });
         res.status(201).json({ success: true });
     } catch (err) {
-        console.err(err.code);
+        console.error(err.code);
         if (err.code === "ER_DUP_ENTRY") {
             res.status(400).send("Email already exists.");
         }

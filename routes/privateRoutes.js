@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const photosController = require("../controllers/photosController");
+const textController = require("../controllers/textController");
 const {authenticateToken} = require("../utils/middleware");
 const multer = require("multer");
 const storage = multer.memoryStorage();
@@ -14,10 +15,10 @@ const upload = multer({storage:storage});
 // router.get("/photos/:entrydate", photosController.getTodaysPhotos);
 
 // POST /text 
-router.post("/text", textController.uploadText)
+router.post("/:entrydate/text", textController.uploadText)
 
 // GET /text
-router.get("/text", textController.getText)
+router.get("/:entrydate/text", textController.getText)
 
 // POST /entries (updates db with layout, text, and photo paths)
 

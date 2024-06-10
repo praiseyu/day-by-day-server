@@ -20,7 +20,7 @@ async function uploadPhoto(req, res) {
           return res.status(500).json({ error: `Error uploading image to Cloudinary:${error}` });
         }
         try {
-          await knex("photos").insert({ user_id: user_id, entry_date: entryDate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type });
+          await knex("photos").insert({ user_id: user_id, entry_date: entryDate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type, public_id: result.public_id });
           return res.json(result);
         }
         catch (err) {

@@ -39,8 +39,13 @@ async function getTripById(req, res) {
     }
 }
 
+async function deleteTrip(req,res){
+
+}
+
 module.exports = {
     createTrip,
     getAllTrips,
-    getTripById
+    getTripById,
+    deleteTrip
 }

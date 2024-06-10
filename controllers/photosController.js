@@ -52,11 +52,9 @@ async function deletePhoto(req,res){
   const {public_id} = req.body;
   const {user_id} = req.user;
   try{
-    const result = await cloudinary.uploader.destroy(public_id);
-    console.log(result);
-    const response = await knex("photos").where({user_id: user_id, public_id:public_id}).del();
-    console.log(response);
-    // return ID of deleted item
+    await cloudinary.uploader.destroy(public_id);
+    await knex("photos").where({user_id: user_id, public_id:public_id}).del();
+    return res.status(200).send("Succesfully deleted image.");
   }catch(err){
     return res.status(500).send("Error deleting image from Cloudinary.");
   }

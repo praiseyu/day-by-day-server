@@ -20,7 +20,7 @@ async function uploadPhoto(req, res) {
           return res.status(500).json({ error: `Error uploading image to Cloudinary:${error}` });
         }
         try {
-          await knex("photos").insert({ user_id: user_id, entry_date: entryDate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type });
+          await knex("photos").insert({ user_id: user_id, entry_date: entryDate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type, public_id: result.public_id });
           return res.json(result);
         }
         catch (err) {
@@ -48,7 +48,22 @@ async function getTodaysPhotos(req, res) {
   }
 }
 
+async function deletePhoto(req,res){
+  const {public_id} = req.body;
+  const {user_id} = req.user;
+  try{
+    const result = await cloudinary.uploader.destroy(public_id);
+    console.log(result);
+    const response = await knex("photos").where({user_id: user_id, public_id:public_id}).del();
+    console.log(response);
+    // return ID of deleted item
+  }catch(err){
+    return res.status(500).send("Error deleting image from Cloudinary.");
+  }
+}
+
 module.exports = {
   uploadPhoto,
-  getTodaysPhotos
+  getTodaysPhotos,
+  deletePhoto
 }

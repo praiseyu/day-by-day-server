@@ -11,8 +11,8 @@ async function authenticateToken(req, res, next) {
         const user = await knex("users").select("user_id", "email", "name").where({ email }).first();
         req.user = user;
 
-        if(!user){
-            res.status(401).json({error: "Unauthorized"});
+        if (!user) {
+            res.status(401).json({ error: "Unauthorized" });
         }
         next();
     } catch (err) {

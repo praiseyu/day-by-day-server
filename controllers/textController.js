@@ -1,6 +1,5 @@
 const knex = require("knex")(require("../knexfile"));
 
-// POST TEXT
 async function uploadText(req, res){
     const {entryDate} = req.params;
     const {description} = req.body;
@@ -14,7 +13,6 @@ async function uploadText(req, res){
     }
 }
 
-// GET TEXT
 async function getText(req, res){
     const {entryDate} = req.params;
     const {user_id} = req.user; 

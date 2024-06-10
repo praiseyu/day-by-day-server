@@ -1,6 +1,4 @@
-const knex = require("knex")(require("../knexfile"));
-
-async function getUserInfo(req,res){
+async function getUserInfo(req, res) {
     return res.json(req.user);
 }
 

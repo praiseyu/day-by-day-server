@@ -39,8 +39,15 @@ async function getTripById(req, res) {
     }
 }
 
-async function deleteTrip(req,res){
-
+async function deleteTrip(req, res) {
+    const { user_id } = req.user;
+    const { trip_id } = req.body;
+    try {
+        await knex("trips").where({ user_id: user_id, trip_id: trip_id }).del();
+        return res.status(200).send("Successfully deleted trip.");
+    } catch (err) {
+        return res.status(500).send(`Error deleting trip: ${err}.`)
+    }
 }
 
 module.exports = {

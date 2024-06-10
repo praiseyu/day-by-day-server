@@ -29,7 +29,6 @@ router.route("/trips")
     .post(body("trip_name").trim().notEmpty(), body("start_date").trim().notEmpty().isDate({ format: "YYYY-MM-DD" }), body("end_date").optional().trim().isDate({ format: "YYYY-MM-DD" }), validateRequestSchema, tripsController.createTrip)
     .get(tripsController.getAllTrips);
 
-
 router.route("/trips/:tripId")
     .get(tripsController.getTripById)
     .delete(tripsController.deleteTrip);
@@ -40,6 +39,5 @@ router.route("/entries/:tripId/:entryDate")
     .post(entriesController.addNewEntry)
     .put(entriesController.saveEditEntry)
     .get(entriesController.getEntry);
-
 
 module.exports = router;

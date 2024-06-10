@@ -1,4 +1,12 @@
+const cloudinary = require("cloudinary").v2;
 const knex = require("knex")(require("../knexfile"));
+
+cloudinary.config({
+    secure: true,
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+});
 
 async function createTrip(req, res) {
     const { user_id } = req.user;
@@ -41,10 +49,36 @@ async function getTripById(req, res) {
 
 async function deleteTrip(req, res) {
     const { user_id } = req.user;
-    const { trip_id } = req.body;
+    const { tripId } = req.params;
     try {
-        await knex("trips").where({ user_id: user_id, trip_id: trip_id }).del();
-        return res.status(200).send("Successfully deleted trip.");
+        await knex.transaction(async (trx) => {
+            const textblocksToDelete = await trx('textblocks')
+                .whereIn('entry_date', trx.select('entry_date').from('entries').where('trip_id', tripId))
+                .select('text_id');
+            if (textblocksToDelete.length > 0) {
+                await trx('textblocks')
+                    .whereIn('text_id', textblocksToDelete.map(tb => tb.text_id))
+                    .del();
+            }
+            const photosToDelete = await trx("photos")
+                .where({ user_id: user_id, trip_id: tripId })
+                .select("public_id");
+            if (photosToDelete.length > 0) {
+                for (let photo of photosToDelete) {
+                    await cloudinary.uploader.destroy(photo.public_id);
+                    await trx('photos')
+                        .where({ user_id, public_id: photo.public_id })
+                        .del();
+                }
+            }
+            await trx("entries")
+                .where('trip_id', tripId)
+                .del();
+            await trx('trips')
+                .where('trip_id', tripId)
+                .del();
+        });
+        res.status(200).send(`Successfully deleted trip: ${tripId}.`);
     } catch (err) {
         return res.status(500).send(`Error deleting trip: ${err}.`)
     }

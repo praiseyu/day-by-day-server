@@ -24,7 +24,7 @@ router.route("/:entryDate/text")
     .post(body("description").trim().notEmpty(), validateRequestSchema, textController.uploadText)
     .get(textController.getText);
 
-router.get("/:entryDate/uploads", entriesController.getUploads);
+// router.get("/:entryDate/uploads", entriesController.getUploads);
 
 router.route("/trips")
     .post(body("trip_name").trim().notEmpty(), body("start_date").trim().notEmpty().isDate({ format: "YYYY-MM-DD" }), body("end_date").optional().trim().isDate({ format: "YYYY-MM-DD" }), validateRequestSchema, tripsController.createTrip)
@@ -32,8 +32,14 @@ router.route("/trips")
 
 router.get("/trips/:tripId", tripsController.getTripById);
 
-router.route("/:tripId/:entryDate")
+
+router.get("/entries/:tripId", entriesController.getEntriesByTripId);
+
+router.route("/entries/:tripId/:entryDate")
 .post(entriesController.addNewEntry)
+.put(entriesController.saveEditEntry)
 .get(entriesController.getEntry);
+
+
 
 module.exports = router;

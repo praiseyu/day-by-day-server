@@ -9,7 +9,7 @@ cloudinary.config({
 });
 
 async function uploadPhoto(req, res) {
-  const { entryDate } = req.params;
+  const { entryDate, tripId } = req.params;
   const { user_id } = req.user;
   try {
     const fileBuffer = req.file.buffer;
@@ -20,7 +20,7 @@ async function uploadPhoto(req, res) {
           return res.status(500).json({ error: `Error uploading image to Cloudinary:${error}` });
         }
         try {
-          await knex("photos").insert({ user_id: user_id, entry_date: entryDate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type, public_id: result.public_id });
+          await knex("photos").insert({ user_id: user_id, entry_date: entryDate, photo_path: result.secure_url, width: result.width, height: result.height, file_type: result.resource_type, public_id: result.public_id, trip_id: tripId });
           return res.json(result);
         }
         catch (err) {
@@ -34,10 +34,10 @@ async function uploadPhoto(req, res) {
 }
 
 async function getTodaysPhotos(req, res) {
-  const { entryDate } = req.params;
+  const { entryDate, tripId } = req.params;
   const { user_id } = req.user;
   try {
-    const photos = await knex("photos").where("user_id", user_id).where("entry_date", entryDate);
+    const photos = await knex("photos").where({user_id: user_id, entry_date: entryDate, trip_id: tripId });
     if (!photos) {
       return res.status(404).send("There are no photos. Upload some to begin.");
     }

@@ -16,12 +16,12 @@ router.use(authenticateToken);
 
 router.get("/profile", userController.getUserInfo);
 
-router.route("/:entryDate/photos")
+router.route("/:tripId/:entryDate/photos")
     .post(upload.single("image"), photosController.uploadPhoto)
     .get(photosController.getTodaysPhotos)
     .delete(photosController.deletePhoto);
 
-router.route("/:entryDate/text")
+router.route("/:tripId/:entryDate/text")
     .post(body("description").trim().notEmpty(), validateRequestSchema, textController.uploadText)
     .get(textController.getText);
 

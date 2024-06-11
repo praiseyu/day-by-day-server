@@ -5,6 +5,9 @@ const authController = require("../controllers/authController");
 const { body } = require("express-validator");
 const { validateRequestSchema } = require("../middleware/validateRequestSchema");
 
+router.get('/test', (req, res) => {
+    res.send('Server is running properly');
+  });
 
 router.post("/signup",
     body("email").isEmail(),
